@@ -18,56 +18,57 @@
 <style>
 :root{
   --paper:#F5EFE5; --paper-2:#FFFDF9; --ink:#2A2420; --muted:#6E6259; --line:#E4D9C8; --card:#FFFCF7;
-  --navy:#5E4230; --navy-ink:#FFF9F0; --teal:#9A6B45; --teal-soft:#F1E4D3; --amber:#B8892E; --amber-soft:#F7ECD6;
+  --brown:#5E4230; --brown-ink:#FFF9F0; --accent:#9A6B45; --accent-soft:#F1E4D3; --gold:#B8892E; --gold-soft:#F7ECD6;
   --chip:#EFE6D8; --focus:#9A6B45; --grid:rgba(94,66,48,.09); --shadow:0 12px 32px rgba(94,66,48,.10);
-  --grad-a:#9A6B45; --grad-b:#5E4230;
   color-scheme: light;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 html,body{margin:0}
-body{background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.6;padding-inline:20px;
-  background-image:radial-gradient(var(--grid) 1px, transparent 1px);background-size:22px 22px;position:relative}
-.topo{position:fixed;inset:-12%;z-index:0;pointer-events:none;background:url("contour.svg") repeat;background-size:1200px 800px;opacity:.75}
-@media (prefers-reduced-motion:no-preference){.topo{animation:drift 90s linear infinite}}
-@keyframes drift{from{background-position:0 0}to{background-position:1200px 800px}}
-.wrap{position:relative;z-index:1}
-a{color:var(--teal)}
-a:focus-visible,button:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
-.wrap{max-width:980px;margin:0 auto}
-h1,h2,h3{font-family:"Sora","IBM Plex Sans",system-ui,sans-serif;text-wrap:balance;margin:0;line-height:1.15}
+body{background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.6;padding-inline:20px;position:relative;overflow-x:hidden;
+  background-image:radial-gradient(var(--grid) 1px, transparent 1px);background-size:22px 22px}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
+.wrap{max-width:980px;margin:0 auto;position:relative;z-index:1}
+h1,h2,h3{font-family:"Sora","IBM Plex Sans",system-ui,sans-serif;text-wrap:balance;margin:0;line-height:1.15;color:var(--ink)}
 h1{font-size:clamp(1.9rem,4.6vw,2.9rem);font-weight:700;letter-spacing:-0.02em}
 h2{font-size:1.45rem;font-weight:600;margin-bottom:6px}
 h3{font-size:1.05rem;font-weight:600}
 p{margin:0}
 .mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
-.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:10px}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
 .sub{color:var(--muted);max-width:62ch;margin-bottom:26px}
 
 header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;justify-content:space-between;align-items:center;padding-block:14px;gap:16px;flex-wrap:wrap;border-bottom:1px solid var(--line);margin-inline:-20px;padding-inline:20px}
-.brand{font-family:"Sora",sans-serif;font-weight:600;color:var(--navy);text-decoration:none;display:inline-flex;align-items:center;gap:10px}
+.brand{font-family:"Sora",sans-serif;font-weight:600;color:var(--brown);text-decoration:none;display:inline-flex;align-items:center;gap:10px}
 .brand img{width:28px;height:28px;border-radius:50%;object-fit:cover}
 nav{display:flex;flex-wrap:wrap;gap:4px 18px}
 nav a{color:var(--muted);text-decoration:none;font-size:.9rem}
 nav a:hover{color:var(--ink)}
 
-.hero{padding-block:52px 36px;display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center}
-@media (max-width:640px){.hero{grid-template-columns:1fr;padding-block:36px 28px}}
+/* hero with generated terrain backdrop + data-network canvas */
+.hero{position:relative;padding-block:56px 40px;display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center;margin-inline:-20px;padding-inline:20px;overflow:hidden}
+.hero > *{position:relative;z-index:2}
+.hero-art{position:absolute;inset:0;z-index:0;pointer-events:none;background:url("hero-terrain.webp") right 55% / auto 118% no-repeat;opacity:.5}
+.hero-art::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--paper) 0%,rgba(245,239,229,.55) 38%,rgba(245,239,229,0) 70%),linear-gradient(180deg,rgba(245,239,229,0) 70%,var(--paper) 100%)}
+#net{position:absolute;inset:0;z-index:1;width:100%;height:100%;pointer-events:none;opacity:.55}
+@media (prefers-reduced-motion:no-preference){.hero-art{animation:floaty 16s ease-in-out infinite alternate}}
+@keyframes floaty{from{transform:translateY(0)}to{transform:translateY(-10px)}}
+@media (max-width:640px){.hero{grid-template-columns:1fr;padding-block:36px 28px}.hero-art{background-position:center 40%;background-size:auto 80%;opacity:.35}}
 .hero .lead{font-size:1.12rem;max-width:60ch;margin-top:18px}
 .hero .where{display:inline-flex;align-items:center;gap:8px;color:var(--muted);margin-top:14px;font-size:.92rem}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 4px var(--teal-soft)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
 .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:8px;text-decoration:none;font-weight:500;font-size:.95rem;border:1px solid var(--line);color:var(--ink);background:var(--card);transition:transform .15s,border-color .15s}
-.btn.primary{background:var(--navy);color:var(--navy-ink);border-color:var(--navy)}
-.btn:hover{border-color:var(--teal);transform:translateY(-1px)}
+.btn.primary{background:var(--brown);color:var(--brown-ink);border-color:var(--brown)}
+.btn:hover{border-color:var(--accent);transform:translateY(-1px)}
 .portrait{position:relative;width:184px;height:184px;flex:none;justify-self:end}
 @media (max-width:640px){.portrait{width:128px;height:128px;justify-self:start;order:-1}}
-.portrait img{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;border:4px solid var(--paper-2);box-shadow:0 14px 36px rgba(94,66,48,.16);position:relative}
-.portrait img{z-index:1}
+.portrait img{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;border:4px solid var(--paper-2);box-shadow:0 14px 36px rgba(94,66,48,.16)}
 
 .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding-block:8px 36px}
 .metric{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
-.metric .n{font-family:"Sora",sans-serif;font-size:1.65rem;font-weight:700;color:var(--navy);font-variant-numeric:tabular-nums;line-height:1.1}
+.metric .n{font-family:"Sora",sans-serif;font-size:1.65rem;font-weight:700;color:var(--brown);font-variant-numeric:tabular-nums;line-height:1.1}
 .metric .l{font-size:.84rem;color:var(--muted);margin-top:6px;line-height:1.4}
 @media (max-width:720px){.metrics{grid-template-columns:repeat(2,1fr)}}
 
@@ -83,16 +84,15 @@ section{padding-block:44px;border-top:1px solid var(--line)}
 .graph .axis{stroke:var(--line);stroke-width:1}
 .graph .path{fill:none;stroke:url(#gstroke);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
 .graph .area{fill:url(#garea)}
-.graph .node{fill:var(--card);stroke:var(--teal);stroke-width:3}
-.graph .node.now{fill:var(--amber);stroke:var(--amber)}
-.graph .halo{fill:var(--teal);opacity:.18}
+.graph .node{fill:var(--card);stroke:var(--accent);stroke-width:3}
+.graph .node.now{fill:var(--gold);stroke:var(--gold)}
+.graph .halo{fill:var(--accent);opacity:.18}
 .graph .tick{stroke:var(--line);stroke-dasharray:2 4}
-.graph g.pt{cursor:default}
 .graph g.pt:hover .node{stroke-width:5}
 .legend{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:10px;font-size:.82rem;color:var(--muted)}
 .legend span{display:inline-flex;align-items:center;gap:6px}
-.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--teal)}
-.legend i.now{background:var(--amber)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--accent)}
+.legend i.now{background:var(--gold)}
 @media (prefers-reduced-motion:no-preference){
   .graph.animate .path{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:draw 2.6s cubic-bezier(.5,0,.2,1) forwards}
   .graph.animate .area{opacity:0;animation:fade 1.2s ease 1.6s forwards}
@@ -102,33 +102,46 @@ section{padding-block:44px;border-top:1px solid var(--line)}
   @keyframes pop{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:scale(1)}}
 }
 
+/* experience timeline with expandable detail */
 .steps{display:grid;grid-template-columns:200px 1fr;gap:0 24px;margin-top:30px}
 .steps .when{font-family:"IBM Plex Mono",monospace;font-size:.8rem;color:var(--muted);padding-top:4px;font-variant-numeric:tabular-nums}
-.steps .what{padding-bottom:22px;border-left:2px solid var(--line);padding-left:20px;position:relative}
-.steps .what::before{content:"";position:absolute;left:-6px;top:9px;width:10px;height:10px;border-radius:50%;background:var(--teal);border:2px solid var(--paper)}
-.steps .what.now::before{background:var(--amber)}
+.steps .what{padding-bottom:26px;border-left:2px solid var(--line);padding-left:20px;position:relative}
+.steps .what::before{content:"";position:absolute;left:-6px;top:9px;width:10px;height:10px;border-radius:50%;background:var(--accent);border:2px solid var(--paper)}
+.steps .what.now::before{background:var(--gold)}
 .steps .org{color:var(--muted);font-size:.92rem}
-.steps ul{margin:8px 0 0;padding-left:18px;font-size:.95rem}
-.steps li{margin-bottom:4px}
-.steps .tag{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--teal);background:var(--teal-soft);padding:2px 8px;border-radius:4px;margin-left:8px;vertical-align:middle}
+.steps p.blurb{margin-top:8px;font-size:.96rem;max-width:66ch}
+.steps ul{margin:8px 0 0;padding-left:18px;font-size:.95rem;max-width:70ch}
+.steps li{margin-bottom:5px}
+.steps .tag{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:2px 8px;border-radius:4px;margin-left:8px;vertical-align:middle}
+.stack{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.stack span{font-family:"IBM Plex Mono",monospace;font-size:.72rem;color:var(--muted);background:var(--chip);padding:2px 8px;border-radius:3px}
+details.more{margin-top:8px}
+details.more summary{cursor:pointer;color:var(--accent);font-size:.9rem;font-weight:500;list-style:none;display:inline-flex;align-items:center;gap:6px}
+details.more summary::-webkit-details-marker{display:none}
+details.more summary::before{content:"+";font-family:"IBM Plex Mono",monospace;width:16px;height:16px;border:1px solid var(--line);border-radius:4px;display:inline-grid;place-items:center;font-size:.75rem;background:var(--card)}
+details.more[open] summary::before{content:"–"}
 @media (max-width:640px){.steps{grid-template-columns:1fr}.steps .when{padding-left:22px;padding-top:0;margin-bottom:2px}}
 
+/* projects: problem / approach / result */
 .projects{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 @media (max-width:720px){.projects{grid-template-columns:1fr}}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px 24px;display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden;transition:transform .18s,box-shadow .18s,border-color .18s}
-.card::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:linear-gradient(90deg,var(--grad-a),var(--grad-b));opacity:0;transition:opacity .18s}
+.card::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:linear-gradient(90deg,var(--accent),var(--brown));opacity:0;transition:opacity .18s}
 .card:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:transparent}
 .card:hover::before{opacity:1}
-.card .result{font-family:"Sora",sans-serif;font-size:1.45rem;font-weight:700;color:var(--teal);font-variant-numeric:tabular-nums}
-.card .tools{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:8px}
+.card .result{font-family:"Sora",sans-serif;font-size:1.45rem;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums}
+.card .ctx{font-size:.8rem;color:var(--muted);font-family:"IBM Plex Mono",monospace}
+.par{display:grid;grid-template-columns:82px 1fr;gap:6px 12px;font-size:.93rem;margin-top:4px}
+.par dt{font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);padding-top:4px}
+.par dd{margin:0}
+.card .tools{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:10px}
 .card .tools span{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--muted);background:var(--chip);padding:2px 8px;border-radius:3px}
-.card p{color:var(--ink);font-size:.95rem}
 
 .skills{display:grid;grid-template-columns:160px 1fr;gap:12px 18px;align-items:start}
 .skills dt{font-family:"IBM Plex Mono",monospace;font-size:.76rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding-top:6px}
 .skills dd{margin:0;display:flex;flex-wrap:wrap;gap:6px}
 .chip{background:var(--chip);color:var(--ink);font-size:.86rem;padding:4px 10px;border-radius:6px;border:1px solid transparent}
-.chip.hot{background:var(--teal-soft);color:var(--teal);font-weight:500}
+.chip.hot{background:var(--accent-soft);color:var(--accent);font-weight:500}
 @media (max-width:640px){.skills{grid-template-columns:1fr}}
 
 .edu{display:grid;grid-template-columns:1fr 1fr;gap:16px}
@@ -136,17 +149,28 @@ section{padding-block:44px;border-top:1px solid var(--line)}
 .edu .card{gap:4px}
 .edu .deg{font-weight:600}
 .certs{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
-.award{background:var(--amber-soft);color:var(--amber);font-weight:500}
+.award{background:var(--gold-soft);color:var(--gold);font-weight:500}
 
+.quote{margin-top:28px;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:10px;padding:18px 22px;max-width:70ch}
+.quote p{font-size:1rem}
+.quote .who{margin-top:8px;font-size:.85rem;color:var(--muted)}
+.vol{margin-top:20px;font-size:.92rem;color:var(--muted)}
+
+/* contact sits on the wireframe terrain */
+#contact{position:relative;border-top:1px solid var(--line);padding-bottom:320px;overflow:hidden}
+#contact > *:not(.terrain){position:relative;z-index:1}
 .contact{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
 .contact .email{display:inline-flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 12px;flex-wrap:wrap}
 .contact button{font:inherit;font-size:.85rem;padding:4px 10px;border-radius:6px;border:1px solid var(--line);background:var(--chip);color:var(--ink);cursor:pointer}
-.contact button:hover{border-color:var(--teal)}
-footer{padding-block:28px 44px;color:var(--muted);font-size:.85rem;border-top:1px solid var(--line);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.contact button:hover{border-color:var(--accent)}
+.terrain{position:absolute;left:calc(50% - 50vw);width:100vw;bottom:-12px;height:min(100%,520px);z-index:0;pointer-events:none;background:url("terrain.svg") center bottom / cover no-repeat;opacity:.95}
+.terrain::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,var(--paper) 0%,rgba(245,239,229,.7) 28%,rgba(245,239,229,0) 58%)}
+@media (prefers-reduced-motion:no-preference){.terrain{animation:breathe 18s ease-in-out infinite alternate}}
+@keyframes breathe{from{transform:translateY(0)}to{transform:translateY(8px)}}
+footer{position:relative;z-index:1;padding-block:28px 44px;color:var(--muted);font-size:.85rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
 </style>
 </head>
 <body>
-<div class="topo" aria-hidden="true"></div>
 <div class="wrap">
 
 <header class="top">
@@ -157,6 +181,8 @@ footer{padding-block:28px 44px;color:var(--muted);font-size:.85rem;border-top:1p
 </header>
 
 <section class="hero" id="top" style="border-top:0">
+  <div class="hero-art" aria-hidden="true"></div>
+  <canvas id="net" aria-hidden="true"></canvas>
   <div>
     <div class="eyebrow">Data Scientist · Data Analyst · AI/ML</div>
     <h1>I turn messy business data into models and dashboards people act on.</h1>
@@ -182,7 +208,6 @@ footer{padding-block:28px 44px;color:var(--muted);font-size:.85rem;border-top:1p
   <div class="eyebrow">Career path</div>
   <h2>From a computer science degree in Vizag to applied AI research</h2>
   <p class="sub">Twelve years, two countries, one direction: closer to the data and the decisions it drives.</p>
-
   <div class="graph-wrap">
     <svg class="graph" id="career-graph" viewBox="0 0 1000 380" role="img" aria-labelledby="cg-title cg-desc">
       <title id="cg-title">Career path 2014 to 2026</title>
@@ -191,7 +216,6 @@ footer{padding-block:28px 44px;color:var(--muted);font-size:.85rem;border-top:1p
         <linearGradient id="gstroke" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#5E4230"/><stop offset="1" stop-color="#9A6B45"/></linearGradient>
         <linearGradient id="garea" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#9A6B45" stop-opacity=".18"/><stop offset="1" stop-color="#9A6B45" stop-opacity="0"/></linearGradient>
       </defs>
-      <!-- axis and year ticks -->
       <line class="axis" x1="60" y1="318" x2="960" y2="318"/>
       <g class="yr">
         <line class="tick" x1="60" y1="60" x2="60" y2="318"/><text x="60" y="340" text-anchor="middle">2014</text>
@@ -202,11 +226,8 @@ footer{padding-block:28px 44px;color:var(--muted);font-size:.85rem;border-top:1p
         <line class="tick" x1="752" y1="60" x2="752" y2="318"/><text x="752" y="340" text-anchor="middle">2024</text>
         <line class="tick" x1="891" y1="60" x2="891" y2="318"/><text x="891" y="340" text-anchor="middle">2026</text>
       </g>
-      <!-- area under the path -->
       <path class="area" d="M95,300 C160,300 160,265 226,265 C260,265 260,247 295,247 C333,247 333,229 372,229 C400,229 400,194 427,194 C458,194 458,158 489,158 C620,158 620,123 752,123 C800,123 800,88 849,88 C894,88 894,70 939,70 L939,318 L95,318 Z"/>
-      <!-- the path -->
       <path class="path" id="career-path" d="M95,300 C160,300 160,265 226,265 C260,265 260,247 295,247 C333,247 333,229 372,229 C400,229 400,194 427,194 C458,194 458,158 489,158 C620,158 620,123 752,123 C800,123 800,88 849,88 C894,88 894,70 939,70"/>
-      <!-- nodes with labels; --i drives the pop-in order -->
       <g class="pt" style="--i:0"><circle class="halo" cx="95" cy="300" r="12"/><circle class="node" cx="95" cy="300" r="6"/><text class="lbl" x="205" y="252" text-anchor="end">B.Tech, Computer Science<tspan class="org" x="205" dy="13">GITAM University · 2014–2018</tspan></text></g>
       <g class="pt" style="--i:1"><circle class="halo" cx="226" cy="265" r="12"/><circle class="node" cx="226" cy="265" r="6"/><text class="lbl" x="226" y="298" text-anchor="middle">App Dev Intern<tspan class="org" x="226" dy="13">Techfort · 2016</tspan></text></g>
       <g class="pt" style="--i:2"><circle class="halo" cx="295" cy="247" r="12"/><circle class="node" cx="295" cy="247" r="6"/><text class="lbl" x="283" y="222" text-anchor="end">Cloud Computing Intern<tspan class="org" x="283" dy="13">Aspirevision · 2017</tspan></text></g>
@@ -217,64 +238,139 @@ footer{padding-block:28px 44px;color:var(--muted);font-size:.85rem;border-top:1p
       <g class="pt" style="--i:7"><circle class="halo" cx="849" cy="88" r="12"/><circle class="node" cx="849" cy="88" r="6"/><text class="lbl" x="836" y="72" text-anchor="end">AI Research Assistant<tspan class="org" x="836" dy="13">University of Utah · 2025–2026</tspan></text></g>
       <g class="pt" style="--i:8"><circle class="halo" cx="939" cy="70" r="14"/><circle class="node now" cx="939" cy="70" r="7"/><text class="lbl" x="952" y="44" text-anchor="end">Now: Hyderabad<tspan class="org" x="952" dy="13">Data Science · AI/ML roles</tspan></text></g>
     </svg>
-  </div>
+</div>
   <div class="legend"><span><i></i>Role or degree</span><span><i class="now"></i>Today</span><span>Height shows progression toward applied data science and AI work</span></div>
-
+  
   <div class="steps">
     <div class="when">Jun 2025 – Mar 2026</div>
     <div class="what now"><h3>AI Research Assistant <span class="tag">Latest</span></h3><div class="org">University of Utah, David Eccles School of Business · Remote</div>
-      <ul><li>Built an automated elective-to-career-goal recommendation workflow with NLP, a RAG architecture and Power Automate over unstructured MBA syllabi, cutting manual effort by more than 60%.</li><li>Tested embedding and BERT-based models and folded in stakeholder feedback to raise accuracy.</li></ul></div>
+      <p class="blurb">Research role building an AI assistant that reads unstructured MBA course syllabi and recommends electives that fit a student's stated career goal.</p>
+      <ul>
+        <li>Built the recommendation workflow on a retrieval-augmented generation (RAG) architecture with NLP over the syllabus text, orchestrated in Microsoft Power Automate. It cut the manual effort behind each recommendation by more than 60%.</li>
+        <li>Ran experiments across embedding models and BERT-based models, compared their performance metrics, and folded stakeholder feedback into the next iteration to raise recommendation accuracy.</li>
+      </ul>
+      <div class="stack"><span>Python</span><span>RAG</span><span>BERT</span><span>Sentence transformers</span><span>Power Automate</span><span>LLMs</span></div>
+    </div>
+
     <div class="when">Aug 2024 – May 2025</div>
     <div class="what"><h3>Graduate Teaching Assistant, Business Analytics</h3><div class="org">University of Utah · Salt Lake City</div>
-      <ul><li>Guided 40+ students on experiment design, hypothesis testing and A/B testing.</li><li>Built a PySpark pipeline in Databricks that cut preprocessing time by 12%.</li></ul></div>
+      <p class="blurb">Taught and supported the analytics coursework while running hands-on data work for the program.</p>
+      <ul>
+        <li>Guided 40+ students on designing experiments, hypothesis testing and A/B tests to measure campaign impact and product changes.</li>
+        <li>Built a PySpark pipeline on high-volume transactional data in Databricks, reducing preprocessing time by 12% for downstream analysis.</li>
+        <li>Ran exploratory analysis and clustering on Walmart customer data to surface purchase patterns that inform targeted marketing.</li>
+        <li>Optimized PostgreSQL queries for course datasets.</li>
+      </ul>
+      <div class="stack"><span>PySpark</span><span>Databricks</span><span>PostgreSQL</span><span>A/B testing</span><span>k-means</span></div>
+    </div>
+
     <div class="when">Jan 2024 – May 2025</div>
-    <div class="what"><h3>MS, Business Analytics</h3><div class="org">University of Utah, David Eccles School of Business · GPA 3.8/4</div></div>
+    <div class="what"><h3>MS, Business Analytics</h3><div class="org">University of Utah, David Eccles School of Business · GPA 3.8/4</div>
+      <p class="blurb">Graduate program covering machine learning, statistics, data engineering and business decision-making; the four projects below come from this period.</p>
+    </div>
+
     <div class="when">Mar 2020 – Mar 2022</div>
     <div class="what"><h3>Solutions Analyst</h3><div class="org">SS&amp;C Eze · Hyderabad</div>
-      <ul><li>Improved efficiency by 30% through SQL and FIX-based root-cause analysis for 1,900+ buy-side firms.</li><li>Forecasting on market data to predict trade-volume spikes; Power BI dashboards that cut reporting time by 25%.</li></ul></div>
+      <p class="blurb">Analytics for the trading and investment platform used by 1,900+ buy-side firms: finding why incidents happen and getting ahead of them.</p>
+      <ul>
+        <li>Improved process efficiency by 30% through SQL and FIX-protocol root-cause analysis, reducing the risk of delayed settlements across 1,900+ buy-side firms.</li>
+        <li>Applied forecasting models to market data to predict trade-volume spikes, so capacity could be allocated ahead of time and incident recurrence went down.</li>
+        <li>Ran correlation and trend analysis on market activity, client engagement and operational KPIs in GCP to identify the drivers of trade incidents and feature adoption.</li>
+        <li>Built automated Power BI dashboards and Confluence reports (with Excel pivot tables) that cut reporting time by 25%.</li>
+      </ul>
+      <div class="stack"><span>SQL</span><span>FIX protocol</span><span>GCP</span><span>Power BI</span><span>Forecasting</span><span>Confluence</span></div>
+    </div>
+
     <div class="when">Apr 2019 – Mar 2020</div>
     <div class="what"><h3>Systems Analyst</h3><div class="org">SS&amp;C Eze · Hyderabad</div>
-      <ul><li>Monitored global hedge-fund trading systems; logistic regression models to find drivers of trade breaks.</li><li>Best Associate of the Quarter for 100% client-service accuracy across APAC, EMEA and NOAM.</li></ul></div>
+      <p class="blurb">Front-line owner of global hedge-fund trading systems, working across APAC, EMEA and North America.</p>
+      <ul>
+        <li>Kept trades executing on time by monitoring the systems and resolving issues directly with brokers.</li>
+        <li>Built logistic regression models with the product and R&amp;D teams to identify the drivers of trade breaks, enabling proactive risk alerts, and validated system fixes through user acceptance testing.</li>
+        <li>Wrote a VBA macro that automated system-reboot alerts, cutting manual intervention time by more than 50%.</li>
+        <li>Awarded Best Associate of the Quarter for 100% client-service accuracy while leading case management across three regions with a lean team.</li>
+      </ul>
+      <div class="stack"><span>SQL Server</span><span>Logistic regression</span><span>VBA</span><span>UAT</span><span>Salesforce</span></div>
+    </div>
+
     <div class="when">Jul 2018 – Mar 2019</div>
     <div class="what"><h3>Analytics Development Associate</h3><div class="org">Accenture · Hyderabad</div>
-      <ul><li>Carlsberg SKU and regional performance analysis in Pandas and SQL Server.</li><li>Customer lifetime value and churn framework that drove a 6% lift in retention.</li></ul></div>
+      <p class="blurb">Consulting analytics for Carlsberg, working directly with the product manager and sales leads.</p>
+      <ul>
+        <li>Ran market research and performance analysis in Pandas and SQL Server to identify Carlsberg's high-performing SKUs and underperforming regions.</li>
+        <li>Developed a customer lifetime value and churn prediction framework to evaluate customer profitability, which guided pricing and promotional offers and drove a 6% lift in customer retention.</li>
+      </ul>
+      <div class="stack"><span>Python</span><span>Pandas</span><span>SQL Server</span><span>Tableau</span><span>CLV</span><span>Churn</span></div>
+    </div>
+
     <div class="when">2016 – 2017</div>
-    <div class="what"><h3>Internships</h3><div class="org">Cloud Computing Intern (Microsoft-certified), Aspirevision Tech · App Development Intern, Techfort Software · Hyderabad</div></div>
+    <div class="what"><h3>Internships</h3><div class="org">Aspirevision Tech Education · Techfort Software Services · Hyderabad</div>
+      <ul>
+        <li>Cloud Computing Intern (Microsoft-certified), 2017: Azure and Google Analytics.</li>
+        <li>App Development Intern, 2016: Java and the software development life cycle, with an Android application development certificate.</li>
+      </ul>
+    </div>
+
     <div class="when">Jun 2014 – Mar 2018</div>
-    <div class="what"><h3>B.Tech, Computer Science</h3><div class="org">GITAM University · Visakhapatnam</div></div>
+    <div class="what"><h3>B.Tech, Computer Science</h3><div class="org">GITAM University · Visakhapatnam</div>
+      <p class="blurb">Event Coordinator for Alloy and Event Organizer for the Computer Society of India student chapter alongside the degree.</p>
+    </div>
   </div>
+
 </section>
 
 <section id="projects">
   <div class="eyebrow">Projects</div>
   <h2>Selected work</h2>
-  <p class="sub">Outcome first. Each of these started with a business question and ended with a number someone could act on.</p>
+  <p class="sub">Each one started with a business question and ended with a number someone could act on. Problem, approach, result.</p>
+  
   <div class="projects">
     <article class="card">
       <div class="result">+$26,477 / yr</div>
       <h3>Swire Coca-Cola: growth optimization</h3>
-      <p>Found an optimal 300-gallon threshold through ETL pipelines, sensitivity analysis and predictive modelling. Raised the growth-ready customer share from 4.12% to 5.27% and built Tableau dashboards to balance growth against delivery cost.</p>
-      <div class="tools"><span>Python</span><span>SQL</span><span>Tableau</span><span>ETL</span></div>
+      <div class="ctx">University of Utah · Apr 2025</div>
+      <dl class="par">
+        <dt>Problem</dt><dd>Which customers deserve direct delivery, and at what annual volume, without cutting off the ones about to grow.</dd>
+        <dt>Approach</dt><dd>ETL pipelines on customer and delivery data, sensitivity analysis on the volume threshold, and a predictive model that classifies customers as high or low growth potential.</dd>
+        <dt>Result</dt><dd>An optimal 300-gallon threshold adding $26,477 in annual revenue, growth-ready customer share up from 4.12% to 5.27%, and real-time Tableau dashboards to balance growth against delivery cost.</dd>
+      </dl>
+      <div class="tools"><span>Python</span><span>SQL</span><span>Tableau</span><span>ETL</span><span>Classification</span></div>
     </article>
     <article class="card">
       <div class="result">98% AUC · 0.91 recall</div>
       <h3>Home Credit: loan default risk</h3>
-      <p>Predicted loan defaults with a tuned gradient boosting model on 37.5M+ records. Feature engineering, upsampling and hyperparameter tuning to cut losses from defaulters classed as creditworthy.</p>
-      <div class="tools"><span>Python</span><span>GBM</span><span>Feature engineering</span></div>
+      <div class="ctx">University of Utah · Dec 2024</div>
+      <dl class="par">
+        <dt>Problem</dt><dd>Predict which loan applicants will default, so people with little credit history can still be approved safely.</dd>
+        <dt>Approach</dt><dd>Exploratory analysis, feature engineering and upsampling for class imbalance, then a gradient boosting model tuned on 37.5M+ records.</dd>
+        <dt>Result</dt><dd>98% AUC and 0.91 recall, cutting the losses that come from defaulters being classed as creditworthy, plus a clear picture of the traits that signal default.</dd>
+      </dl>
+      <div class="tools"><span>Python</span><span>GBM</span><span>Feature engineering</span><span>Upsampling</span></div>
     </article>
     <article class="card">
       <div class="result">$26,559 less pricing error</div>
       <h3>Ames property price prediction</h3>
-      <p>Neural-network price model for Ames houses. Outlier detection and clustering (PCA, k-means) to find the pricing segments that matter to buyers and investors.</p>
+      <div class="ctx">University of Utah · 2024</div>
+      <dl class="par">
+        <dt>Problem</dt><dd>Price houses in Ames, Iowa accurately enough for buyers and investors to act on.</dd>
+        <dt>Approach</dt><dd>A neural-network price model, with outlier detection to clean the data and PCA plus k-means to find the pricing segments that matter.</dd>
+        <dt>Result</dt><dd>Pricing error reduced by $26,559, with segments real-estate stakeholders could use for targeted marketing and investment decisions.</dd>
+      </dl>
       <div class="tools"><span>Python</span><span>Neural networks</span><span>PCA</span><span>k-means</span></div>
     </article>
     <article class="card">
       <div class="result">175K tweets analyzed</div>
       <h3>Super Bowl game day challenge</h3>
-      <p>Sentiment analysis and time-series forecasting on tweets about 2024 Super Bowl ads. Identified the top commercials, ad-timing effects and viewer preferences, reported as advertising ROI in Tableau.</p>
-      <div class="tools"><span>R</span><span>SQL</span><span>Python</span><span>Tableau</span></div>
+      <div class="ctx">University of Utah · 2024</div>
+      <dl class="par">
+        <dt>Problem</dt><dd>Which 2024 Super Bowl ads landed with viewers, and when during the game should a brand run its spot.</dd>
+        <dt>Approach</dt><dd>Sentiment analysis and time-series forecasting on roughly 175K tweets using R, SQL (PostgreSQL) and Python, with retweet and virality tracking.</dd>
+        <dt>Result</dt><dd>The top-performing commercials, ad-timing effects and viewer preferences, delivered as Tableau infographics on advertising ROI.</dd>
+      </dl>
+      <div class="tools"><span>R</span><span>SQL</span><span>Python</span><span>Tableau</span><span>NLP</span></div>
     </article>
   </div>
+
 </section>
 
 <section id="skills">
@@ -283,9 +379,9 @@ footer{padding-block:28px 44px;color:var(--muted);font-size:.85rem;border-top:1p
   <p class="sub">Highlighted chips are the daily tools.</p>
   <dl class="skills">
     <dt>Languages</dt><dd><span class="chip hot">Python</span><span class="chip hot">SQL</span><span class="chip hot">R</span><span class="chip">PySpark</span><span class="chip">VBA</span></dd>
-    <dt>Machine learning</dt><dd><span class="chip">XGBoost</span><span class="chip">Random Forest</span><span class="chip">Logistic regression</span><span class="chip">Neural networks</span><span class="chip">NLP (BERT, sentence transformers)</span><span class="chip">RAG and LLM workflows</span><span class="chip">Time series (ARIMAX)</span><span class="chip">k-means, PCA</span></dd>
-    <dt>Statistics</dt><dd><span class="chip">Hypothesis testing</span><span class="chip">A/B testing</span><span class="chip">Causal inference</span><span class="chip">Forecasting</span><span class="chip">Sentiment analysis</span></dd>
-    <dt>Tools</dt><dd><span class="chip hot">Tableau</span><span class="chip hot">Power BI</span><span class="chip">Databricks</span><span class="chip">GCP</span><span class="chip">Azure</span><span class="chip">PostgreSQL</span><span class="chip">BigQuery</span><span class="chip">SQL Server</span><span class="chip">Git</span><span class="chip">Power Automate</span><span class="chip">n8n</span><span class="chip">Excel</span></dd>
+    <dt>Machine learning</dt><dd><span class="chip">XGBoost</span><span class="chip">Random Forest</span><span class="chip">Logistic regression</span><span class="chip">SVM, Naive Bayes</span><span class="chip">Neural networks</span><span class="chip">NLP (BERT, sentence transformers)</span><span class="chip">RAG and LLM workflows</span><span class="chip">Time series (ARIMAX)</span><span class="chip">k-means, PCA</span><span class="chip">Feature engineering</span></dd>
+    <dt>Statistics</dt><dd><span class="chip">Hypothesis testing</span><span class="chip">A/B testing</span><span class="chip">t, z, ANOVA, chi-squared</span><span class="chip">Causal inference</span><span class="chip">Forecasting</span><span class="chip">Sentiment analysis</span></dd>
+    <dt>Tools</dt><dd><span class="chip hot">Tableau</span><span class="chip hot">Power BI</span><span class="chip">Databricks</span><span class="chip">GCP</span><span class="chip">Azure</span><span class="chip">PostgreSQL</span><span class="chip">BigQuery</span><span class="chip">SQL Server</span><span class="chip">MySQL</span><span class="chip">Git</span><span class="chip">Power Automate</span><span class="chip">n8n</span><span class="chip">Salesforce</span><span class="chip">Confluence</span><span class="chip">Excel</span><span class="chip">Claude, GPT, Gemini, Copilot</span></dd>
   </dl>
 </section>
 
@@ -297,11 +393,13 @@ footer{padding-block:28px 44px;color:var(--muted);font-size:.85rem;border-top:1p
     <div class="card"><div class="deg">B.Tech, Computer Science</div><div>GITAM University, Visakhapatnam</div><div class="mono" style="color:var(--muted);font-size:.8rem">Jun 2014 – Mar 2018</div></div>
   </div>
   <div class="certs">
-    <span class="chip">Tableau · Coursera</span><span class="chip">Foundations of Strategic Business Analytics · ESSEC</span><span class="chip">Marketing Analytics · ESSEC</span><span class="chip">MySQL for Data Analytics · Udemy</span><span class="chip">Introduction to Power BI · DataCamp</span><span class="chip award">Best Associate of the Quarter · SS&amp;C Eze</span>
+    <span class="chip">Tableau · Coursera, 2023</span><span class="chip">Foundations of Strategic Business Analytics · ESSEC, 2023</span><span class="chip">Marketing Analytics · ESSEC, 2024</span><span class="chip">MySQL for Data Analytics and BI · Udemy</span><span class="chip">Introduction to Power BI · DataCamp</span><span class="chip">Android Application Development · Techfort, 2016</span><span class="chip">Cloud Computing Intern · Microsoft, 2017</span><span class="chip award">Best Associate of the Quarter · SS&amp;C Eze</span>
   </div>
+  <blockquote class="quote"><p>"Dependable and thorough as a Graduate Teaching Assistant."</p><div class="who">Stanford Pugsley, Lecturer at the University of Utah, who managed Nikita directly. Full recommendation on <a href="https://www.linkedin.com/in/nikita-muddapati/" target="_blank" rel="noopener">LinkedIn</a>.</div></blockquote>
 </section>
 
 <section id="contact">
+  <div class="terrain" aria-hidden="true"></div>
   <div class="eyebrow">Contact</div>
   <h2>Get in touch</h2>
   <p class="sub">Hiring for a data or AI role in Hyderabad? Email is the quickest way to reach me.</p>
@@ -318,14 +416,39 @@ footer{padding-block:28px 44px;color:var(--muted);font-size:.85rem;border-top:1p
 (function(){
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // data-network canvas in the hero: drifting nodes, lines between neighbours
+  var cv = document.getElementById('net');
+  if (cv && cv.getContext) {
+    var ctx = cv.getContext('2d'), hero = cv.parentElement, pts = [], W = 0, H = 0, raf = null, running = false;
+    var N = 46, R = 120;
+    function size(){ var r = hero.getBoundingClientRect(); var dpr = Math.min(2, window.devicePixelRatio || 1); W = r.width; H = r.height; cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); }
+    function seed(){ pts = []; for (var i = 0; i < N; i++) pts.push({ x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - .5) * .18, vy: (Math.random() - .5) * .18, r: 1.2 + Math.random() * 1.6 }); }
+    function frame(){
+      ctx.clearRect(0, 0, W, H);
+      for (var i = 0; i < pts.length; i++) { var p = pts[i]; if (!reduce) { p.x += p.vx; p.y += p.vy; if (p.x < 0 || p.x > W) p.vx *= -1; if (p.y < 0 || p.y > H) p.vy *= -1; } }
+      for (var i = 0; i < pts.length; i++) for (var j = i + 1; j < pts.length; j++) {
+        var a = pts[i], b = pts[j], dx = a.x - b.x, dy = a.y - b.y, d = Math.sqrt(dx * dx + dy * dy);
+        if (d < R) { ctx.strokeStyle = 'rgba(94,66,48,' + (0.22 * (1 - d / R)).toFixed(3) + ')'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
+      }
+      for (var i = 0; i < pts.length; i++) { var p = pts[i]; ctx.fillStyle = 'rgba(94,66,48,.55)'; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill(); }
+      if (running && !reduce) raf = requestAnimationFrame(frame);
+    }
+    function start(){ if (running) return; running = true; frame(); }
+    function stop(){ running = false; if (raf) cancelAnimationFrame(raf); raf = null; }
+    size(); seed(); frame();
+    if (!reduce && 'IntersectionObserver' in window) {
+      new IntersectionObserver(function(en){ en[0].isIntersecting ? start() : stop(); }, { threshold: 0.05 }).observe(hero);
+      document.addEventListener('visibilitychange', function(){ document.hidden ? stop() : start(); });
+    }
+    var t; window.addEventListener('resize', function(){ clearTimeout(t); t = setTimeout(function(){ size(); seed(); frame(); }, 150); });
+  }
+
   // career graph: draw the line when it scrolls into view
   var svg = document.getElementById('career-graph'), path = document.getElementById('career-path');
   if (svg && path && !reduce && 'IntersectionObserver' in window) {
     try { svg.style.setProperty('--len', path.getTotalLength()); } catch (e) {}
     var seen = false;
-    new IntersectionObserver(function(entries){
-      entries.forEach(function(en){ if (en.isIntersecting && !seen) { seen = true; svg.classList.add('animate'); } });
-    }, { threshold: 0.35 }).observe(svg);
+    new IntersectionObserver(function(entries){ entries.forEach(function(en){ if (en.isIntersecting && !seen) { seen = true; svg.classList.add('animate'); } }); }, { threshold: 0.35 }).observe(svg);
   }
 
   // metrics: count up once
@@ -334,12 +457,10 @@ footer{padding-block:28px 44px;color:var(--muted);font-size:.85rem;border-top:1p
     var fmt = function(v){ return v.toLocaleString('en-US'); };
     var io = new IntersectionObserver(function(entries){
       entries.forEach(function(en){
-        if (!en.isIntersecting) return;
-        var el = en.target; io.unobserve(el);
+        if (!en.isIntersecting) return; var el = en.target; io.unobserve(el);
         var target = +el.getAttribute('data-count'), pre = el.getAttribute('data-prefix') || '', suf = el.getAttribute('data-suffix') || '';
         var t0 = null, dur = 1400;
-        function step(ts){ if (!t0) t0 = ts; var p = Math.min(1, (ts - t0) / dur); p = 1 - Math.pow(1 - p, 3);
-          el.textContent = pre + fmt(Math.round(target * p)) + suf; if (p < 1) requestAnimationFrame(step); }
+        function step(ts){ if (!t0) t0 = ts; var p = Math.min(1, (ts - t0) / dur); p = 1 - Math.pow(1 - p, 3); el.textContent = pre + fmt(Math.round(target * p)) + suf; if (p < 1) requestAnimationFrame(step); }
         requestAnimationFrame(step);
       });
     }, { threshold: 0.6 });
@@ -347,11 +468,11 @@ footer{padding-block:28px 44px;color:var(--muted);font-size:.85rem;border-top:1p
   }
 
   // copy email
-  var b = document.getElementById('copy-email'), t = document.getElementById('email-text');
-  if (b && t) b.addEventListener('click', function(){
-    var s = t.textContent;
+  var b = document.getElementById('copy-email'), t2 = document.getElementById('email-text');
+  if (b && t2) b.addEventListener('click', function(){
+    var s = t2.textContent;
     function done(){ b.textContent = 'Copied'; setTimeout(function(){ b.textContent = 'Copy'; }, 1500); }
-    function fallback(){ var r = document.createRange(); r.selectNodeContents(t); var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r); b.textContent = 'Select and copy'; setTimeout(function(){ b.textContent = 'Copy'; }, 2000); }
+    function fallback(){ var r = document.createRange(); r.selectNodeContents(t2); var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r); b.textContent = 'Select and copy'; setTimeout(function(){ b.textContent = 'Copy'; }, 2000); }
     try { navigator.clipboard.writeText(s).then(done, fallback); } catch (e) { fallback(); }
   });
 })();
