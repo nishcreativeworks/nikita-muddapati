@@ -51,7 +51,7 @@ nav a:hover{color:var(--ink)}
 .hero > *{position:relative;z-index:2}
 .hero-art{position:absolute;left:calc(50% - 50vw);width:100vw;top:-14px;height:min(100%,470px);z-index:0;pointer-events:none;background:url("terrain.svg") center bottom / cover no-repeat;opacity:1;transform:rotate(180deg)}
 .hero-art::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,var(--paper) 0%,rgba(245,239,229,.55) 30%,rgba(245,239,229,0) 68%)}
-#net{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.9}
+#net{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.8}
 @media (prefers-reduced-motion:no-preference){.hero-art{animation:floaty 18s ease-in-out infinite alternate}}
 @keyframes floaty{from{transform:rotate(180deg) translateY(0)}to{transform:rotate(180deg) translateY(8px)}}
 @media (max-width:640px){.hero{grid-template-columns:1fr;padding-block:36px 28px}.hero-art{height:260px;opacity:.7}}
@@ -421,15 +421,24 @@ footer{position:relative;z-index:1;padding-block:28px 44px;color:var(--muted);fo
     var ctx = cv.getContext('2d'), pts = [], W = 0, H = 0, raf = null, running = false;
     var N = 72, R = 150;
     function size(){ var r = cv.getBoundingClientRect(); var dpr = Math.min(2, window.devicePixelRatio || 1); W = r.width; H = r.height; cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); }
-    function seed(){ N = Math.max(40, Math.min(130, Math.round(W * H / 17000))); pts = []; for (var i = 0; i < N; i++) pts.push({ x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - .5) * .18, vy: (Math.random() - .5) * .18, r: 1.4 + Math.random() * 1.8 }); }
+    // keep-out zone = the content column; nodes live in the side margins, a couple of rovers may cross the middle
+    var ZL = 0, ZR = 0, side = 0;
+    function zone(){ var col = Math.min(1080, W); side = (W - col) / 2; if (side < 90) { side = 0; ZL = 0; ZR = 0; } else { ZL = side; ZR = W - side; } }
+    function seed(){
+      zone(); pts = [];
+      var per = side ? Math.max(14, Math.min(60, Math.round(side * H / 15000))) : Math.max(16, Math.min(40, Math.round(W * H / 40000)));
+      function mk(x0, x1, rover){ pts.push({ x: x0 + Math.random() * (x1 - x0), y: Math.random() * H, vx: (Math.random() - .5) * .18, vy: (Math.random() - .5) * .18, r: 1.4 + Math.random() * 1.8, x0: x0, x1: x1, rover: rover }); }
+      if (side) { for (var i = 0; i < per; i++) mk(0, ZL, false); for (var i = 0; i < per; i++) mk(ZR, W, false); for (var i = 0; i < 3; i++) mk(0, W, true); }
+      else { for (var i = 0; i < per; i++) mk(0, W, true); }
+    }
     function frame(){
       ctx.clearRect(0, 0, W, H);
-      for (var i = 0; i < pts.length; i++) { var p = pts[i]; if (!reduce) { p.x += p.vx; p.y += p.vy; if (p.x < 0 || p.x > W) p.vx *= -1; if (p.y < 0 || p.y > H) p.vy *= -1; } }
+      for (var i = 0; i < pts.length; i++) { var p = pts[i]; if (!reduce) { p.x += p.vx; p.y += p.vy; if (p.x < p.x0 || p.x > p.x1) { p.vx *= -1; p.x = Math.max(p.x0, Math.min(p.x1, p.x)); } if (p.y < 0 || p.y > H) p.vy *= -1; } }
       for (var i = 0; i < pts.length; i++) for (var j = i + 1; j < pts.length; j++) {
         var a = pts[i], b = pts[j], dx = a.x - b.x, dy = a.y - b.y, d = Math.sqrt(dx * dx + dy * dy);
-        if (d < R) { ctx.strokeStyle = 'rgba(94,66,48,' + (0.42 * (1 - d / R)).toFixed(3) + ')'; ctx.lineWidth = 1.15; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
+        if (d < R) { var k = (a.rover || b.rover) ? 0.18 : 0.34; ctx.strokeStyle = 'rgba(94,66,48,' + (k * (1 - d / R)).toFixed(3) + ')'; ctx.lineWidth = 1.1; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
       }
-      for (var i = 0; i < pts.length; i++) { var p = pts[i]; ctx.fillStyle = 'rgba(94,66,48,.8)'; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill(); }
+      for (var i = 0; i < pts.length; i++) { var p = pts[i]; ctx.fillStyle = p.rover ? 'rgba(94,66,48,.45)' : 'rgba(94,66,48,.72)'; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill(); }
       if (running && !reduce) raf = requestAnimationFrame(frame);
     }
     function start(){ if (running) return; running = true; frame(); }
