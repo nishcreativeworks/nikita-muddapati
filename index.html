@@ -428,17 +428,16 @@ footer{position:relative;z-index:1;padding-block:28px 44px;color:var(--muted);fo
       zone(); pts = [];
       var per = side ? Math.max(14, Math.min(60, Math.round(side * H / 15000))) : Math.max(16, Math.min(40, Math.round(W * H / 40000)));
       function mk(x0, x1, rover){ pts.push({ x: x0 + Math.random() * (x1 - x0), y: Math.random() * H, vx: (Math.random() - .5) * .18, vy: (Math.random() - .5) * .18, r: 1.4 + Math.random() * 1.8, x0: x0, x1: x1, rover: rover }); }
-      if (side) { for (var i = 0; i < per; i++) mk(0, ZL, false); for (var i = 0; i < per; i++) mk(ZR, W, false); for (var i = 0; i < 3; i++) mk(0, W, true); }
-      else { for (var i = 0; i < per; i++) mk(0, W, true); }
+      if (side) { for (var i = 0; i < per; i++) mk(0, ZL, false); for (var i = 0; i < per; i++) mk(ZR, W, false); }   // no nodes inside the content column; none at all when there is no margin
     }
     function frame(){
       ctx.clearRect(0, 0, W, H);
       for (var i = 0; i < pts.length; i++) { var p = pts[i]; if (!reduce) { p.x += p.vx; p.y += p.vy; if (p.x < p.x0 || p.x > p.x1) { p.vx *= -1; p.x = Math.max(p.x0, Math.min(p.x1, p.x)); } if (p.y < 0 || p.y > H) p.vy *= -1; } }
       for (var i = 0; i < pts.length; i++) for (var j = i + 1; j < pts.length; j++) {
         var a = pts[i], b = pts[j], dx = a.x - b.x, dy = a.y - b.y, d = Math.sqrt(dx * dx + dy * dy);
-        if (d < R) { var k = (a.rover || b.rover) ? 0.18 : 0.34; ctx.strokeStyle = 'rgba(94,66,48,' + (k * (1 - d / R)).toFixed(3) + ')'; ctx.lineWidth = 1.1; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
+        if (d < R) { var k = 0.34; ctx.strokeStyle = 'rgba(94,66,48,' + (k * (1 - d / R)).toFixed(3) + ')'; ctx.lineWidth = 1.1; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
       }
-      for (var i = 0; i < pts.length; i++) { var p = pts[i]; ctx.fillStyle = p.rover ? 'rgba(94,66,48,.45)' : 'rgba(94,66,48,.72)'; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill(); }
+      for (var i = 0; i < pts.length; i++) { var p = pts[i]; ctx.fillStyle = 'rgba(94,66,48,.72)'; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill(); }
       if (running && !reduce) raf = requestAnimationFrame(frame);
     }
     function start(){ if (running) return; running = true; frame(); }
