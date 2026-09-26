@@ -25,8 +25,7 @@
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 html,body{margin:0}
-body{background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.6;padding-inline:20px;position:relative;overflow-x:hidden;
-  background-image:radial-gradient(var(--grid) 1px, transparent 1px);background-size:22px 22px}
+body{background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.6;padding-inline:20px;position:relative;overflow-x:hidden}
 a{color:var(--accent)}
 a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
 .wrap{max-width:1040px;margin:0 auto;position:relative;z-index:1}
@@ -52,7 +51,7 @@ nav a:hover{color:var(--ink)}
 .hero > *{position:relative;z-index:2}
 .hero-art{position:absolute;left:calc(50% - 50vw);width:100vw;top:-14px;height:min(100%,470px);z-index:0;pointer-events:none;background:url("terrain.svg") center bottom / cover no-repeat;opacity:1;transform:rotate(180deg)}
 .hero-art::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,var(--paper) 0%,rgba(245,239,229,.55) 30%,rgba(245,239,229,0) 68%)}
-#net{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.5}
+#net{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.9}
 @media (prefers-reduced-motion:no-preference){.hero-art{animation:floaty 18s ease-in-out infinite alternate}}
 @keyframes floaty{from{transform:rotate(180deg) translateY(0)}to{transform:rotate(180deg) translateY(8px)}}
 @media (max-width:640px){.hero{grid-template-columns:1fr;padding-block:36px 28px}.hero-art{height:260px;opacity:.7}}
@@ -420,17 +419,17 @@ footer{position:relative;z-index:1;padding-block:28px 44px;color:var(--muted);fo
   var cv = document.getElementById('net');
   if (cv && cv.getContext) {
     var ctx = cv.getContext('2d'), pts = [], W = 0, H = 0, raf = null, running = false;
-    var N = 60, R = 130;
+    var N = 72, R = 150;
     function size(){ var r = cv.getBoundingClientRect(); var dpr = Math.min(2, window.devicePixelRatio || 1); W = r.width; H = r.height; cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); }
-    function seed(){ N = Math.max(18, Math.min(110, Math.round(W * H / 24000))); pts = []; for (var i = 0; i < N; i++) pts.push({ x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - .5) * .18, vy: (Math.random() - .5) * .18, r: 1.2 + Math.random() * 1.6 }); }
+    function seed(){ N = Math.max(40, Math.min(130, Math.round(W * H / 17000))); pts = []; for (var i = 0; i < N; i++) pts.push({ x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - .5) * .18, vy: (Math.random() - .5) * .18, r: 1.4 + Math.random() * 1.8 }); }
     function frame(){
       ctx.clearRect(0, 0, W, H);
       for (var i = 0; i < pts.length; i++) { var p = pts[i]; if (!reduce) { p.x += p.vx; p.y += p.vy; if (p.x < 0 || p.x > W) p.vx *= -1; if (p.y < 0 || p.y > H) p.vy *= -1; } }
       for (var i = 0; i < pts.length; i++) for (var j = i + 1; j < pts.length; j++) {
         var a = pts[i], b = pts[j], dx = a.x - b.x, dy = a.y - b.y, d = Math.sqrt(dx * dx + dy * dy);
-        if (d < R) { ctx.strokeStyle = 'rgba(94,66,48,' + (0.22 * (1 - d / R)).toFixed(3) + ')'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
+        if (d < R) { ctx.strokeStyle = 'rgba(94,66,48,' + (0.42 * (1 - d / R)).toFixed(3) + ')'; ctx.lineWidth = 1.15; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
       }
-      for (var i = 0; i < pts.length; i++) { var p = pts[i]; ctx.fillStyle = 'rgba(94,66,48,.55)'; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill(); }
+      for (var i = 0; i < pts.length; i++) { var p = pts[i]; ctx.fillStyle = 'rgba(94,66,48,.8)'; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill(); }
       if (running && !reduce) raf = requestAnimationFrame(frame);
     }
     function start(){ if (running) return; running = true; frame(); }
